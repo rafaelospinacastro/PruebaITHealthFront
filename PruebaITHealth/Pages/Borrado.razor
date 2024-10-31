@@ -1,0 +1,22 @@
+﻿@page "/borrar"
+
+@inject HttpClient Http
+
+<PageTitle>Buscar Pacientes</PageTitle>
+
+<label> Digite el id del paciente que desea borrar</label>
+
+<InputText @bind-Value="id" />
+<button class="btn btn-danger" @onclick="Buscar">Borrar</button>
+
+
+@code {
+    private Paciente paciente;
+    public string id;
+    private async Task Buscar()
+    {
+        string url = $"https://localhost:7281/Pacientes/borrarpaciente/{id}";
+        var respuesta = await Http.DeleteAsync(url);
+    }
+}
+

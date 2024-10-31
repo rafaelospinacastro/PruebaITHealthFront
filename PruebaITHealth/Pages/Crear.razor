@@ -1,0 +1,41 @@
+﻿@page "/crear"
+
+@inject HttpClient Http
+@using Models
+
+<PageTitle>Crear Pacientes</PageTitle>
+
+<label> Digite el id del paciente que desea buscar</label>
+
+<EditForm Model=@paciente OnSubmit=@Guardar>
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label for="Documento">Numero Documento</label>
+        <InputText @bind-Value=paciente.NumeroDocumento class="form-control" id="NumeroDocumento" />
+        <ValidationMessage For="() => paciente.NumeroDocumento" />
+    </div>
+    <div class="form-group">
+        <label for="Nombre">Nombre Paciente</label>
+        <InputNumber @bind-Value=paciente.Nombre class="form-control" id="Nombre" />
+        <ValidationMessage For=@(() => paciente.Nombre) />
+    </div>
+    <input type="submit" class="btn btn-primary" value="Save" />
+</EditForm>
+
+@code {
+    Paciente paciente = new Paciente();
+    string resultado;
+
+    async Task Guardar(EditContext editContext)
+    {
+        bool formIsValid = editContext.Validate();
+        resultado =
+          formIsValid
+          ? "Guardado con exito"
+          : "Hubo un error";
+        string url = $"https://localhost:7281/Pacientes/";
+        var respuesta = await Http.PostAsJsonAsync(url, paciente);
+    }
+}
+
+
